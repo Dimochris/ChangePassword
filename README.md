@@ -1,2 +1,3 @@
 # ChangePassword
 Password change form with an input field for the current password and a new password entry with criteria.
+Password change form with an input field for the current password and a new password entry with the following criteria: at least one uppercase letter, more than 8 characters, at least one number, must not be the same as the previous password, and must include a symbol such as: !@#$%^&*. Below the input, there should be a preview showing which of these criteria are met and a bar indicating the password strength. The change password button should only be enabled once all criteria are fulfilled.
