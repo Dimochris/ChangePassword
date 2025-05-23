@@ -93,6 +93,7 @@ const ChangePasswordForm = () => {
   const [form] = Form.useForm();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [capsLockOn, setCapsLockOn] = useState(false); // ΝΕΟ
 
   const strengthScore = getPasswordStrength(newPassword);
   const strength = getStrengthLabel(strengthScore);
@@ -105,7 +106,8 @@ const ChangePasswordForm = () => {
     currentPassword &&
     newPassword !== currentPassword &&
     !commonPasswords.includes(newPassword.toLowerCase()) &&
-    confirmPassword === newPassword;
+    confirmPassword === newPassword &&
+    !/\s/.test(newPassword); // Προστέθηκε αυτός ο έλεγχος
 
   const onFinish = (values) => {
     console.log("🔐 Νέος Κωδικός:", values.newPassword);
@@ -145,6 +147,9 @@ const ChangePasswordForm = () => {
             {
               validator: (_, value) => {
                 if (!value) return Promise.resolve();
+                if (/\s/.test(value)) {
+                  return Promise.reject("Ο κωδικός δεν επιτρέπεται να περιέχει κενά.");
+                }
                 if (getPasswordStrength(value) < 4) {
                   return Promise.reject("Ο κωδικός δεν πληροί τα απαιτούμενα");
                 }
@@ -153,7 +158,6 @@ const ChangePasswordForm = () => {
                     "Ο νέος κωδικός δεν μπορεί να είναι ίδιος με τον τρέχοντα"
                   );
                 }
-                // Έλεγχος για κοινούς κωδικούς
                 if (commonPasswords.includes(value.toLowerCase())) {
                   return Promise.reject(
                     "Ο κωδικός είναι πολύ κοινός. Διάλεξε έναν πιο σύνθετο."
@@ -168,8 +172,14 @@ const ChangePasswordForm = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             autoComplete="new-password"
+            onKeyUp={(e) => setCapsLockOn(e.getModifierState && e.getModifierState("CapsLock"))}
           />
         </Form.Item>
+        {capsLockOn && (
+          <Text type="warning" style={{ marginBottom: 8, display: "block" }}>
+            Προσοχή: Το Caps Lock είναι ενεργό!
+          </Text>
+        )}
 
         {newPassword && (
           <>
