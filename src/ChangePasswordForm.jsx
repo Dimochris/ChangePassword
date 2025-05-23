@@ -10,6 +10,7 @@ import {
   Carousel,
 } from "antd";
 import commonPasswords from "./common-passwords";
+import "./ChangePasswordForm.css";
 
 const { Text, Title } = Typography;
 
@@ -110,11 +111,10 @@ const ChangePasswordForm = () => {
     !/\s/.test(newPassword); // Προστέθηκε αυτός ο έλεγχος
 
   const onFinish = (values) => {
-    console.log("🔐 Νέος Κωδικός:", values.newPassword);
-    // Υποβολή στο backend εδώ
-
+    message.success("Ο κωδικός άλλαξε με επιτυχία!");
     form.resetFields();
     setNewPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -243,10 +243,23 @@ const ChangePasswordForm = () => {
         </div>
 
         <Form.Item style={{ marginTop: 20 }}>
-          <Button type="primary" htmlType="submit" block disabled={!canSubmit}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            disabled={!canSubmit}
+            className="glass-btn"
+          >
             Αλλαγή Κωδικού
           </Button>
         </Form.Item>
+
+        {newPassword &&
+          commonPasswords.includes(newPassword.toLowerCase()) && (
+            <Text type="danger" style={{ display: "block", marginBottom: 8 }}>
+              Ο κωδικός που πληκτρολόγησες είναι πολύ κοινός. Διάλεξε έναν πιο σύνθετο!
+            </Text>
+          )}
       </Form>
     </div>
   );
