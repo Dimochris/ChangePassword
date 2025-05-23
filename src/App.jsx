@@ -1,6 +1,5 @@
 import React from 'react'
 import ChangePasswordForm from './ChangePasswordForm'
-import './App.css'
 
 function App() {
  
